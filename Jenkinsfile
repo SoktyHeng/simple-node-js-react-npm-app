@@ -1,9 +1,24 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:13.10.0-alpine'
+            args '-u root:root'
+        }
+    }
     stages {
-        stage('Build') { 
+        stage('Build') {
             steps {
-                sh 'npm install' 
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
             }
         }
     }
